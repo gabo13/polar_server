@@ -1,6 +1,7 @@
 #include <AccelStepper.h>
 #include <MultiStepper.h>
 #include "machine.h"
+#include "interpolation.hpp"
 /****
 -----2021.03.25. 18:00-----
 * Parancsok:
@@ -168,29 +169,29 @@ void com_exec(int param_count) { // parancsok futtatása
     Serial.print(inCmds[i]);
     Serial.println(';');
   #endif
-    if(strcmp(inCmds[i], CMD_G00)== 0) {
+    if(strcmp(inCmds[i], CMD_G00)== 0) {        //G00
       impl_g00();    
-    } else if(strcmp(inCmds[i], CMD_G01)== 0) {
+    } else if(strcmp(inCmds[i], CMD_G01)== 0) { //G01
       impl_g01();
-    } else if(strcmp(inCmds[i], CMD_C00)== 0) {
+    } else if(strcmp(inCmds[i], CMD_C00)== 0) { //C00
       impl_c00();
-    } else if(strcmp(inCmds[i], CMD_C00)== 0) {
-      impl_c00();
-    } else if(strcmp(inCmds[i], CMD_C01)== 0) {
+    } else if(strcmp(inCmds[i], CMD_C01)== 0) { //C01
       impl_c01();
-    } else if(strcmp(inCmds[i], CMD_G90)== 0) {
+    } else if(strcmp(inCmds[i], CMD_G90)== 0) { //G90
       impl_g90();
-    } else if(strcmp(inCmds[i], CMD_G91)== 0) {
+    } else if(strcmp(inCmds[i], CMD_G91)== 0) { //G91
       impl_g91();
-    } else if(strcmp(inCmds[i], CMD_SET)== 0) {
+    } else if(strcmp(inCmds[i], CMD_SET)== 0) { //SET
       impl_set();
-    } else if(inCmds[i][0] == CMD_A) {
-      
-    }
-    } else if(inCmds[i][0] == CMD_X) {
+    } else if(inCmds[i][0] == CMD_A) {          //A left stepper
+      Serial.print("A value: ");
+      Serial.println(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_B) {          //B left stepper
+      Serial.print("B value: ");
+      Serial.println(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_X) {          //X position
       Serial.print("x value: ");
       Serial.println(atof(&inCmds[i][1]));
-
     }
   }
   machine.run();

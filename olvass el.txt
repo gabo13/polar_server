@@ -1,0 +1,17 @@
+https://www.thingiverse.com/thing:798076/comments
+https://www.thingiverse.com/thing:2956776
+
+Rajztábla méretei: 496mm*697mm*12mm
+Motor középpontja 6mm+11.25mm=17.25mm a tábla széleitől
+
+A4 210mm*297mm 105x148,5
+A3 297mm*420mm 148.5x210
+
+Két motor közti távolság: 460mm
+Y_MAX=550mm a tábla szélétől 550-17,25 a motoroktól ~533mm
+A rajzlap tetejének távolsága motorok vízszintes tengelyétől: 184mm
+
+GT2-6mm T16 bordáskerék 5mm furat
+Léptetőmotor 1.8fok lépésenként egy fordulat 200 lépésenként
+Gt2 szíj fogtávolsága 2mm akkor egy fordulat T16-nál 32mm
+
