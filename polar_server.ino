@@ -1,7 +1,7 @@
 #include <AccelStepper.h>
 #include <MultiStepper.h>
-#include "machine.h"
-#include "interpolation.hpp"
+#include "machine.hpp"
+
 /****
 -----2021.03.25. 18:00-----
 * Parancsok:
@@ -46,6 +46,9 @@ const static char CMD_A = 'A'; // A KOORDINÁTA
 const static char CMD_B = 'B'; // B KOORDINÁTA
 const static char CMD_F = 'F'; // F ELŐTOLÁS
 
+const static char* HELP = "HELP";
+const static char* POWERON = "PWRON";
+const static char* POWEROFF = "PWROFF";
 
 static char inCmds[PCOUNT][PLENGTH]; // parameterek
 static bool prompt_enable = true;
@@ -121,21 +124,25 @@ void impl_g00() {
   #ifdef DEBUG
   Serial.println("    G00 parancs futtatva");
   #endif
+  machine.penUp();
 }
 void impl_g01() {
   #ifdef DEBUG
   Serial.println("    G01 parancs futtatva");
   #endif
+  machine.penDown();
 }
 void impl_c00() {
   #ifdef DEBUG
   Serial.println("    C00 parancs futtatva");
   #endif
+  machine.penUp();
 }
 void impl_c01() {
   #ifdef DEBUG
   Serial.println("    C01 parancs futtatva");
   #endif
+  machine.penDown();
 }
 void impl_g90() {
   #ifdef DEBUG
@@ -151,6 +158,7 @@ void impl_set() {
   #ifdef DEBUG
   Serial.println("    SET parancs futtatva");
   #endif
+  machine.setZero(225, 533);
 }
 void com_exec(int param_count) { // parancsok futtatása
   #ifdef DEBUG
@@ -163,35 +171,73 @@ void com_exec(int param_count) { // parancsok futtatása
   //void (*exec_fncPtr)();
   for (int i = 0; i<param_count; i++) {
   #ifdef DEBUG
-    Serial.print(" Param");
+    Serial.print(" Param-");
     Serial.print(i);
     Serial.print(": ");
     Serial.print(inCmds[i]);
     Serial.println(';');
   #endif
-    if(strcmp(inCmds[i], CMD_G00)== 0) {        //G00
+    if(strcmp(inCmds[i], CMD_G00)== 0)
+    {        //G00
       impl_g00();    
-    } else if(strcmp(inCmds[i], CMD_G01)== 0) { //G01
+    } else if(strcmp(inCmds[i], CMD_G01)== 0)
+    { //G01
       impl_g01();
-    } else if(strcmp(inCmds[i], CMD_C00)== 0) { //C00
+    } else if(strcmp(inCmds[i], CMD_C00)== 0)
+    { //C00
       impl_c00();
-    } else if(strcmp(inCmds[i], CMD_C01)== 0) { //C01
+    } else if(strcmp(inCmds[i], CMD_C01)== 0)
+    { //C01
       impl_c01();
-    } else if(strcmp(inCmds[i], CMD_G90)== 0) { //G90
+    } else if(strcmp(inCmds[i], CMD_G90)== 0)
+    { //G90
       impl_g90();
-    } else if(strcmp(inCmds[i], CMD_G91)== 0) { //G91
+    } else if(strcmp(inCmds[i], CMD_G91)== 0)
+    { //G91
       impl_g91();
-    } else if(strcmp(inCmds[i], CMD_SET)== 0) { //SET
+    } else if(strcmp(inCmds[i], CMD_SET)== 0)
+    { //SET
       impl_set();
-    } else if(inCmds[i][0] == CMD_A) {          //A left stepper
+    } else if(strcmp(inCmds[i], HELP)== 0)
+    {
+      Serial.println("HELP:");
+      Serial.println("G00 G01 C00 C01 G90 G91 SET PWRON PWROFF");
+    } else if(strcmp(inCmds[i], POWERON)== 0)
+    {
+      machine.powerOn();
+    } else if(strcmp(inCmds[i], POWEROFF)== 0)
+    {
+      machine.powerOff();
+    } else if(inCmds[i][0] == CMD_A)    // CMD_A
+    {
       Serial.print("A value: ");
       Serial.println(atof(&inCmds[i][1]));
-    } else if(inCmds[i][0] == CMD_B) {          //B left stepper
+      machine.setA(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_B)    //CMD_B
+    {
       Serial.print("B value: ");
       Serial.println(atof(&inCmds[i][1]));
-    } else if(inCmds[i][0] == CMD_X) {          //X position
-      Serial.print("x value: ");
+      machine.setB(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_X)    //CMD_X
+    {
+      Serial.print("X value: ");
       Serial.println(atof(&inCmds[i][1]));
+      machine.setX(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_Y)    //CMD_Y
+    {
+      Serial.print("Y value: ");
+      Serial.println(atof(&inCmds[i][1]));
+      machine.setY(atof(&inCmds[i][1]));
+    } else if(inCmds[i][0] == CMD_F)    //CMD_F
+    {
+      machine.setF(atof(&inCmds[i][1]));
+      Serial.print("F value: ");
+      Serial.println(atof(&inCmds[i][1]));
+    } else
+    {
+      Serial.print("Unknown command: ");
+      Serial.println(inCmds[i]);
+      return;
     }
   }
   machine.run();
