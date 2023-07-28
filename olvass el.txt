@@ -1,6 +1,8 @@
 https://www.thingiverse.com/thing:798076/comments
 https://www.thingiverse.com/thing:2956776
 
+http://win.adrirobot.it/arduino/cnc_shield/cnc_shield.htm
+
 Rajztábla méretei: 496mm*697mm*12mm
 Motor középpontja 6mm+11.25mm=17.25mm a tábla széleitől
 
