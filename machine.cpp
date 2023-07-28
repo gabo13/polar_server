@@ -14,6 +14,11 @@ Machine::Machine(int width = 450, int height =450) { //(mm)
          * PIN 8 Enable pin
          * PIN 3 Step pin
          * PIN 6 Dir pin
+         *
+         * Motor C
+         * PIN 8 Enable pin
+         * PIN 4 Step pin
+         * PIN 7 Dir pin
         */
         pinMode(mEnablPin,OUTPUT);
         mA = AccelStepper(1,3,6);
